@@ -1,54 +1,44 @@
-//Read in JSON file
-// var data = d3.json("samples.json").then(function(data) {
-//     console.log(data);
-// });
-
-console.log(data);
-
-// Populate dropdown list
-var select = document.getElementById("selDataset");
-var options = data.names;
-
-console.log(options);
-for (var i = 0; i < options.length; i++) {
-    
-    var opt = options[i];
-    var el = document.createElement("option");
-    el.textContent = opt;
-    el.value = opt;
-    select.appendChild(el);
+function DrawBargraph(sampleId) {
+    console.log(`Bargraph(${sampleId})`);
 }
 
-var id = "945"
-//Data for demographics
-function demographics() {
-    for (var i = 0; i <data.samples.length; i++) {
-        if (data.samples[i].id === id) {
-            Object.entries(demos).forEach(function([key,value]) {
-                var cell = panel-body.append("td");
-            })
+function DrawBubblechart(sampleId) {
+    console.log(`Bubblechart(${sampleId})`);
+}
 
-            //var labels = Object.keys(data.metadata[i]);
-           //var demo = Object.values(data.metadata[i]);
-           //var demos = Object.entries(data.metadata[i]);
-            
-            //console.log(demos);
-        } 
-    }  
-            
-};
+function DrawGauge(sampleId) {
+    console.log(`Gauge(${sampleId})`);
+}
 
-//Data for bar chart
-function filterOTU() {
-    for (var i = 0; i <data.samples.length; i++) {
-        if (data.samples[i].id === id) {
-            var valueList = data.samples[i].sample_values;
-            
-            console.log(valueList);
-        } 
-    }  
-            
-};
+function optionChanged(newSampleId) {
+    console.log(`new ${newSampleId}`);
 
-filterOTU();
-demographics();
+    DrawBargraph(newSampleId);
+}
+
+function InitDashboard() {
+    
+    var selector = d3.select("#selDataset");
+
+    d3.json("samples.json").then((data) => {
+        console.log(data);
+
+        var sampleNames = data.names; 
+
+        //Populate dropdown with IDs
+        sampleNames.forEach((sampleId) => {
+            selector.append("option").text(sampleId).property("value", sampleId);
+        });
+
+        //Get first sample Id
+        var sampleId = sampleNames[0];
+     
+        //Draw the graphs
+        DrawBargraph(sampleId);
+        DrawBubblechart(sampleId);
+        DrawGauge(sampleId);
+
+    });
+}
+
+InitDashboard()
