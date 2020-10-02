@@ -1,9 +1,4 @@
-//Read in JSON file
-var data = d3.json("../samples.json").then(function(data) {
-    console.log(data);
-});
 
-console.log(data);
 
 // Populate dropdown list
 var select = document.getElementById("selDataset");
