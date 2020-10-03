@@ -7,7 +7,7 @@ function DrawBargraph(sampleId) {
     d3.json("samples.json").then((data) => {
     
         var samples = data.samples;
-        var resultArray = samples.filter(s => s.id == sampleId);
+        var resultArray = samples.filter(sample => sample.id == sampleId);
         var result = resultArray[0];
 
         var otu_ids = result.otu_ids;
@@ -39,7 +39,7 @@ function DrawBubblechart(sampleId) {
     //Get data from JSON file
     d3.json("samples.json").then((data) => {
         var samples = data.samples;
-        var resultArray = samples.filter(s => s.id == sampleId);
+        var resultArray = samples.filter(sample => sample.id == sampleId);
         var result = resultArray[0];
 
         var otu_ids = result.otu_ids;
@@ -68,6 +68,34 @@ function DrawBubblechart(sampleId) {
 
 function DrawGauge(sampleId) {
     console.log(`Gauge(${sampleId})`);
+
+    d3.json("samples.json").then((data) => {
+        var metadata = data.metadata;
+        var metadataInfo = metadata.filter(metadata => metadata.id == sampleId);
+        var washFreq = metadataInfo[0].wfreq;
+
+        var gaugeData = {
+            value: washFreq,
+            title: { text: "Scrubs per Week"},
+            type: "indicator",
+            text: ['0-1','1-2','2-3','3-4','4-5','5-6','6-7','7-8','8-9'],
+            mode: "gauge+number",
+            gauge: {
+                bar: {color: "blue"},
+                axis: {range: [null, 9]},
+                steps: [
+                    { range: [0, 1], color: "lightgray", text: "0-1" },
+                  ]
+            }
+        }
+
+        var gaugeLayout = {
+            title: "Belly Button Washing Frequency"
+        };
+
+        Plotly.newPlot("gauge", [gaugeData], gaugeLayout);
+        
+    })
 }
 
 function ShowMetadata(sampleId) {
@@ -103,6 +131,8 @@ function InitDashboard() {
 
     //Load JSON data
     d3.json("samples.json").then((data) => {
+
+        console.log(data)
         
         var selector = d3.select("#selDataset");
         var options = data.names; 
