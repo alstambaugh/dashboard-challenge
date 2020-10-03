@@ -1,6 +1,9 @@
-function DrawBargraph(sampleId) {
-    console.log(`Bargraph(${sampleId})`);
+//Code walk-through by Dom during office hours was used as starter code for this file
 
+//Function to draw the bar graph
+function DrawBargraph(sampleId) {
+    
+    //Get data from json file
     d3.json("samples.json").then((data) => {
     
         var samples = data.samples;
@@ -30,8 +33,37 @@ function DrawBargraph(sampleId) {
     });
 }
 
+//Function to draw bubble chart
 function DrawBubblechart(sampleId) {
-    console.log(`Bubblechart(${sampleId})`);
+    
+    //Get data from JSON file
+    d3.json("samples.json").then((data) => {
+        var samples = data.samples;
+        var resultArray = samples.filter(s => s.id == sampleId);
+        var result = resultArray[0];
+
+        var otu_ids = result.otu_ids;
+        var otu_labels = result.otu_labels;
+        var sample_values = result.sample_values;
+        
+        var bubbleData = {
+            x: otu_ids,
+            y: sample_values,
+            text: otu_labels, 
+            mode: 'markers',
+            marker: {
+                color: otu_ids,
+                size: sample_values
+            }   
+        };
+
+        var bubbleLayout = {
+            title: "Bacterial Cultures Found",
+            xaxis: { title: "OTU IDs"},
+        };
+
+        Plotly.newPlot("bubble", [bubbleData], bubbleLayout);
+    })
 }
 
 function DrawGauge(sampleId) {
@@ -39,29 +71,28 @@ function DrawGauge(sampleId) {
 }
 
 function ShowMetadata(sampleId) {
-    console.log(`Metadata ${sampleId}`);
-
+    
+    //Get data from JSON file
     d3.json("samples.json").then((data) => {
-
-        var metadata = data.metadata;
-        var resultArray = metadata.filter(md => md.id == sampleId);
+        var demographic = data.metadata;
+        var resultArray = demographic.filter(demographic => demographic.id == sampleId);
         var result = resultArray[0];
 
         var panel = d3.select('#sample-metadata');
         panel.html("");
 
-        Object.entries(result).forEach(([key, value]) => {
+        Object.entries(result).forEach(([k, v]) => {
 
-            var textToShow = `SampleId = ${sampleId}`;
-            panel.append("h6").text(textToShow);
+            var text = `${k} = ${v}`;
+            panel.append("h6").text(text);
 
         });
     });
 }
 
+//Function to update charts when selector is changed
 function optionChanged(newSampleId) {
-    console.log(`new ${newSampleId}`);
-
+    
     DrawBargraph(newSampleId);
     DrawBubblechart(newSampleId);
     DrawGauge(newSampleId);
@@ -72,8 +103,7 @@ function InitDashboard() {
 
     //Load JSON data
     d3.json("samples.json").then((data) => {
-        console.log(data);
-
+        
         var selector = d3.select("#selDataset");
         var options = data.names; 
 
