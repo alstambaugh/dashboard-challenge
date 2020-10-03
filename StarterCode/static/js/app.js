@@ -81,10 +81,19 @@ function DrawGauge(sampleId) {
             text: ['0-1','1-2','2-3','3-4','4-5','5-6','6-7','7-8','8-9'],
             mode: "gauge+number",
             gauge: {
-                bar: {color: "blue"},
-                axis: {range: [null, 9]},
+                bar: {color: "#FFEB3b"},
+                axis: {range: [null, 9], tickvals: [1,2,3,4,5,6,7,8,9]},
                 steps: [
-                    { range: [0, 1], color: "lightgray", text: "0-1" },
+                    { range: [0, 1], color: "#acf0f2" },
+                    { range: [1, 2], color: "#8cd3dd" },
+                    { range: [2, 3], color: "#6eb6c9" },
+                    { range: [3, 4], color: "#529ab4" },
+                    { range: [4, 5], color: "#468ca9" },
+                    { range: [5, 6], color: "#3a7e9e" },
+                    { range: [6, 7], color: "#236388" },
+                    { range: [7, 8], color: "#0f4972" },
+                    { range: [8, 9], color: "#00305a" },
+
                   ]
             }
         }
